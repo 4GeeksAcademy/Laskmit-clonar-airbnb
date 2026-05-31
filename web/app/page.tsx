@@ -1,65 +1,106 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { BottomNavBar } from "@/components/bottom-nav-bar";
+import { CategoryCarousel } from "@/components/category-carousel";
+import { PropertyGrid } from "@/components/property-grid";
+import { TopNavBar } from "@/components/top-nav-bar";
+import { categoryOptions, stays } from "@/lib/stays-data";
+import { Stay, StayCategory } from "@/types/stay";
+
+type HomeCategory = StayCategory | "all";
+
+const homeCategories = [
+  { key: "all", label: "Todo", icon: "Todos" },
+  ...categoryOptions,
+];
+
+export default function HomePage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeCategory, setActiveCategory] = useState<HomeCategory>("all");
+  const [loading, setLoading] = useState(true);
+  const [allStays, setAllStays] = useState<Stay[]>([]);
+  const [visibleStays, setVisibleStays] = useState<Stay[]>([]);
+
+  const filterStays = (source: Stay[], search: string, category: HomeCategory) => {
+    const normalizedSearch = search.trim().toLowerCase();
+
+    return source.filter((stay) => {
+      const matchesCategory = category === "all" || stay.category === category;
+      const matchesSearch =
+        normalizedSearch.length === 0 ||
+        stay.title.toLowerCase().includes(normalizedSearch) ||
+        stay.location.toLowerCase().includes(normalizedSearch) ||
+        stay.country.toLowerCase().includes(normalizedSearch);
+
+      return matchesCategory && matchesSearch;
+    });
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setVisibleStays(filterStays(allStays, value, activeCategory));
+  };
+
+  const handleCategorySelect = (category: string) => {
+    const nextCategory = category as HomeCategory;
+    setActiveCategory(nextCategory);
+    setVisibleStays(filterStays(allStays, searchTerm, nextCategory));
+  };
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      setAllStays(stays);
+      setVisibleStays(filterStays(stays, "", "all"));
+      setLoading(false);
+    }, 1000);
+
+    return () => window.clearTimeout(timerId);
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen bg-[var(--surface)]">
+      <TopNavBar searchValue={searchTerm} onSearchChange={handleSearchChange} />
+      <CategoryCarousel categories={homeCategories} active={activeCategory} onSelect={handleCategorySelect} />
+
+      <section className="mx-auto flex w-full max-w-[1280px] items-center justify-between px-6 pt-8 md:px-10">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--on-surface-variant)]">
+            Escapadas de la semana
           </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--on-surface)] md:text-4xl">
+            Descubre tu proxima estancia inolvidable
+          </h1>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        <Link
+          href="/catalog"
+          className="hidden rounded-full border border-[var(--outline-variant)] bg-white px-5 py-2 text-sm font-semibold text-[var(--on-surface)] md:inline-flex"
+        >
+          Abrir catalogo
+        </Link>
+      </section>
+
+      {loading ? (
+        <section className="mx-auto w-full max-w-[1280px] px-6 py-10 md:px-10">
+          <div className="rounded-2xl border border-[var(--outline-variant)] bg-white p-6 text-sm text-[var(--on-surface-variant)]">
+            Cargando alojamientos...
+          </div>
+        </section>
+      ) : (
+        <>
+          {visibleStays.length > 0 ? (
+            <PropertyGrid stays={visibleStays} />
+          ) : (
+            <section className="mx-auto w-full max-w-[1280px] px-6 py-10 md:px-10">
+              <div className="rounded-2xl border border-[var(--outline-variant)] bg-white p-6 text-sm text-[var(--on-surface-variant)]">
+                No encontramos alojamientos para esa busqueda.
+              </div>
+            </section>
+          )}
+        </>
+      )}
+      <BottomNavBar active="explorar" />
+    </main>
   );
 }
