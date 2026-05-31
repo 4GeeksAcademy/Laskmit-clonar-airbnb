@@ -3,12 +3,19 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 
+// Que hace: muestra una galeria con foto principal, navegacion y miniaturas.
+// De que depende: lista de imagenes (o fallback), estado local de indice y next/image.
+// Donde se usa: RoomDetailContent.
+// Hooks usados: useState (indice activo), useMemo (resolver fuente de imagenes).
+
 interface ImageGalleryProps {
   tones: string[];
   images?: string[]; // Nuevo: lista de imágenes
 }
 
+// Galeria navegable: usa imagenes reales si existen, o placeholders cuando faltan.
 export const ImageGallery = ({ tones, images }: ImageGalleryProps) => {
+  // Define la fuente de miniaturas y foto principal con fallback seguro.
   const galleryImages = useMemo(() => {
     if (images && images.length > 0) {
       return images;
@@ -17,9 +24,12 @@ export const ImageGallery = ({ tones, images }: ImageGalleryProps) => {
     return tones.map(() => "/images/placeholder.jpg");
   }, [images, tones]);
 
+  // currentIndex representa la foto seleccionada por usuario.
   const [currentIndex, setCurrentIndex] = useState(0);
+  // safeIndex evita desbordes cuando la cantidad de imagenes cambia.
   const safeIndex = Math.min(currentIndex, Math.max(0, galleryImages.length - 1));
   const currentImage = galleryImages[safeIndex];
+  // Navegacion circular para moverse entre imagenes.
   const goPrev = () => setCurrentIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
   const goNext = () => setCurrentIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
 
@@ -45,6 +55,7 @@ export const ImageGallery = ({ tones, images }: ImageGalleryProps) => {
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1">
+        {/* Miniaturas clicables para salto directo a una foto concreta. */}
         {galleryImages.map((img, index) => (
           <button
             type="button"

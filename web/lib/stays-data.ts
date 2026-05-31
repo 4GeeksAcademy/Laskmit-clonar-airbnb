@@ -1,5 +1,10 @@
 import { CategoryOption, Stay } from "@/types/stay";
 
+// Que hace: centraliza datos mock y helpers de consulta de estancias.
+// De que depende: tipos de dominio Stay/CategoryOption.
+// Donde se usa: Home, Catalog y Detail.
+
+// Opciones de categoria usadas por filtros y carruseles de navegacion.
 export const categoryOptions: CategoryOption[] = [
   { key: "cabins", label: "Cabanas", icon: "Cabana" },
   { key: "pools", label: "Piscinas", icon: "Piscina" },
@@ -9,7 +14,9 @@ export const categoryOptions: CategoryOption[] = [
   { key: "design", label: "Diseno", icon: "Autor" },
 ];
 
+// Dataset local de estancias usado por la UI para prototipar sin backend.
 export const stays: Stay[] = [
+  // Estancia 1: escenario de costa orientado a descanso.
   {
     id: "sjo-ocean-dome",
     title: "Domo oceano con terraza privada",
@@ -77,6 +84,7 @@ export const stays: Stay[] = [
     ],
     coordinates: { x: 68, y: 52 },
   },
+  // Estancia 2: escenario urbano para viajes cortos y trabajo remoto.
   {
     id: "med-cloud-loft",
     title: "Loft panoramico en distrito creativo",
@@ -134,6 +142,7 @@ export const stays: Stay[] = [
     ],
     coordinates: { x: 40, y: 41 },
   },
+  // Estancia 3: escenario de montana con enfoque de naturaleza.
   {
     id: "baro-ridge-cabin",
     title: "Cabana de altura con tina termica",
@@ -191,6 +200,7 @@ export const stays: Stay[] = [
     ],
     coordinates: { x: 78, y: 30 },
   },
+  // Estancia 4: escenario premium de piscina y servicio.
   {
     id: "tul-lagoon-pool-house",
     title: "Casa laguna con piscina infinita",
@@ -250,10 +260,12 @@ export const stays: Stay[] = [
   },
 ];
 
+// Busca una estancia por id para renderizar detalle de ruta dinamica.
 export function getStayById(id: string): Stay | undefined {
   return stays.find((stay) => stay.id === id);
 }
 
+// Obtiene recomendaciones excluyendo el id actual, limitado por cantidad maxima.
 export function getRelatedStays(currentId: string, max = 3): Stay[] {
   return stays.filter((stay) => stay.id !== currentId).slice(0, max);
 }

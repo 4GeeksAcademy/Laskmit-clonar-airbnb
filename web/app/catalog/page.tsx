@@ -7,9 +7,17 @@ import { SplitViewLayout } from "@/components/split-view-layout";
 import { TopNavBar } from "@/components/top-nav-bar";
 import { stays } from "@/lib/stays-data";
 
+// Que hace: muestra el catalogo con ordenamiento por precio y vista dividida lista + mapa.
+// De que depende: useMemo/useState, dataset local y componentes de catalogo/mapa.
+// Donde se usa: ruta /catalog.
+// Hooks usados: useState (orden actual), useMemo (lista ordenada memoizada).
+
+// CatalogPage muestra un listado ordenable y su mapa asociado en vista dividida.
 export default function CatalogPage() {
+  // Controla si el orden por precio es ascendente o descendente.
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  // Prepara datos para catalogo: cambia imagenes y aplica orden por precio.
   const catalogStays = useMemo(() => {
     const withCatalogImages = stays.map((stay, index) => ({
       ...stay,
@@ -22,6 +30,7 @@ export default function CatalogPage() {
   }, [sortOrder]);
 
   return (
+    // Estructura: barra superior, filtros, controles de orden, split list/map y nav movil.
     <main className="min-h-screen bg-[var(--surface)]">
       <TopNavBar compact />
       <FilterBar activeLabel="Todos" />

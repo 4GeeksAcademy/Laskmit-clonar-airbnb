@@ -1,5 +1,10 @@
 import Link from "next/link";
 
+// Que hace: encapsula estados visuales del detalle (cargando y no encontrado).
+// De que depende: estilos del proyecto y enlace de retorno con next/link.
+// Donde se usa: RoomDetailPage.
+
+// Estado temporal mostrado mientras se resuelve la estancia solicitada.
 export const RoomDetailLoading = () => {
   return (
     <section className="mx-auto w-full max-w-[1280px] px-6 py-10 md:px-10">
@@ -10,6 +15,7 @@ export const RoomDetailLoading = () => {
   );
 };
 
+// Estado de error funcional cuando el id no coincide con ninguna estancia en datos.
 export const RoomDetailNotFound = () => {
   return (
     <section className="mx-auto w-full max-w-[1280px] px-6 py-10 md:px-10">

@@ -1,3 +1,7 @@
+// Que hace: presenta el resumen de costos de la reserva en filas claras.
+// De que depende: valores ya calculados por BookingWidget.
+// Donde se usa: BookingWidget.
+
 interface BookingCostBreakdownProps {
   pricePerNight: number;
   nights: number;
@@ -7,6 +11,7 @@ interface BookingCostBreakdownProps {
   total: number;
 }
 
+// Presenta en formato legible los valores ya calculados por el widget de reserva.
 export const BookingCostBreakdown = ({
   pricePerNight,
   nights,

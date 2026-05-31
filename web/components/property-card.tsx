@@ -2,14 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Stay } from "@/types/stay";
 
+// Que hace: muestra el resumen visual y textual de una estancia.
+// De que depende: datos Stay, next/image para imagen optimizada y Link a detalle.
+// Donde se usa: Home, Catalog y seccion de relacionados en Detail.
+
 interface PropertyCardProps {
   stay: Stay;
   compact?: boolean;
 }
 
+// Tarjeta resumen de una estancia: combina imagen, metadata y acceso al detalle.
 export const PropertyCard = ({ stay, compact = false }: PropertyCardProps) => {
   return (
     <article className="group flex flex-col gap-3">
+      {/* Toda la tarjeta es clicable para simplificar navegacion en movil y desktop. */}
       <Link href={`/rooms/${stay.id}`} className="space-y-3">
         <div
           className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${stay.imageTones[0]} ${
@@ -23,6 +29,7 @@ export const PropertyCard = ({ stay, compact = false }: PropertyCardProps) => {
             sizes={compact ? "(max-width: 768px) 100vw, 45vw" : "(max-width: 768px) 100vw, 33vw"}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
+          {/* Badge condicional para destacar estancias de alto interes para huespedes. */}
           {stay.guestFavorite && (
             <span className="absolute left-3 top-3 rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-[var(--on-surface)]">
               Favorito entre huespedes

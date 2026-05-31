@@ -1,3 +1,8 @@
+// Que hace: define el contrato de tipos del dominio de estancias.
+// De que depende: tipos TypeScript nativos (sin dependencias externas).
+// Donde se usa: componentes, paginas y helpers de datos del proyecto.
+
+// Categorias permitidas para clasificar estancias y filtrar resultados.
 export type StayCategory =
   | "cabins"
   | "pools"
@@ -6,12 +11,14 @@ export type StayCategory =
   | "city"
   | "design";
 
+// DTO para construir pills o tarjetas de categorias en UI.
 export interface CategoryOption {
   key: StayCategory;
   label: string;
   icon: string;
 }
 
+// Datos del anfitrion mostrados en la ficha de detalle.
 export interface HostProfile {
   name: string;
   yearsHosting: number;
@@ -20,6 +27,7 @@ export interface HostProfile {
   superhost: boolean;
 }
 
+// Estructura de cada resena visible en el bloque de valoraciones.
 export interface StayReview {
   id: string;
   author: string;
@@ -28,6 +36,7 @@ export interface StayReview {
   comment: string;
 }
 
+// Entidad principal de la aplicacion: representa un alojamiento completo.
 export interface Stay {
   id: string;
   title: string;

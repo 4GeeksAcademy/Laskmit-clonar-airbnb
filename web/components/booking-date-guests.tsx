@@ -2,6 +2,10 @@
 
 import DatePicker from "react-datepicker";
 
+// Que hace: captura check-in/check-out y cantidad de huespedes.
+// De que depende: react-datepicker y callbacks recibidos del BookingWidget.
+// Donde se usa: BookingWidget.
+
 interface BookingDateGuestsProps {
   checkIn: Date | null;
   checkOut: Date | null;
@@ -12,6 +16,7 @@ interface BookingDateGuestsProps {
   onGuestsChange: (delta: number) => void;
 }
 
+// Subcomponente de BookingWidget para mantener separada la captura de fechas y cantidad de huespedes.
 export const BookingDateGuests = ({
   checkIn,
   checkOut,
@@ -23,6 +28,7 @@ export const BookingDateGuests = ({
 }: BookingDateGuestsProps) => {
   return (
     <>
+      {/* DatePicker controla rango valido: check-out nunca anterior a check-in. */}
       <div className="mt-4 grid grid-cols-2 overflow-hidden rounded-xl border border-[var(--outline-variant)]">
         <div className="border-r border-[var(--outline-variant)] p-3 text-left text-xs">
           <p className="font-semibold">Check-in</p>
@@ -52,6 +58,7 @@ export const BookingDateGuests = ({
         </div>
       </div>
 
+      {/* Stepper simple para incrementar/decrementar huespedes dentro de limites. */}
       <div className="mt-3 rounded-xl border border-[var(--outline-variant)] p-3">
         <p className="text-xs font-semibold">Huespedes</p>
         <div className="mt-2 flex items-center justify-between">

@@ -1,7 +1,13 @@
+// Que hace: pinta una barra de filtros rapidos en formato pills.
+// De que depende: etiqueta de categoria activa y arreglo local de filtros visuales.
+// Donde se usa: Catalog.
+
 interface FilterBarProps {
   activeLabel?: string;
 }
 
+// Barra visual de filtros rapidos para catalogo.
+// Actualmente representa opciones UI; la logica de filtrado real puede conectarse despues.
 export const FilterBar = ({ activeLabel = "Todos" }: FilterBarProps) => {
   const pills = ["Precio", "Tipo de alojamiento", "Cancelacion gratuita", "Instanbook"]; 
 

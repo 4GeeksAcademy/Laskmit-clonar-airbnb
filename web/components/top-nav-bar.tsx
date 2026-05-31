@@ -2,13 +2,19 @@
 
 import Link from "next/link";
 
+// Que hace: dibuja la barra superior con logo, buscador/CTA y acciones de usuario.
+// De que depende: props de modo compacto y callbacks de busqueda, ademas de next/link.
+// Donde se usa: Home, Catalog y Detail.
+
 interface TopNavBarProps {
   compact?: boolean;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
 }
 
+// Barra superior reutilizable: en home muestra buscador activo y en otras vistas usa modo compacto.
 export const TopNavBar = ({ compact = false, searchValue, onSearchChange }: TopNavBarProps) => {
+  // Solo habilita input real cuando recibe valor y callback de cambio.
   const hasSearch = typeof searchValue === "string" && typeof onSearchChange === "function";
 
   return (
@@ -18,6 +24,7 @@ export const TopNavBar = ({ compact = false, searchValue, onSearchChange }: TopN
           StayShare
         </Link>
 
+        {/* Si hay props de busqueda, renderiza un input controlado; si no, una UI de CTA. */}
         {hasSearch ? (
           <label
             className="flex w-full max-w-[620px] items-center gap-2 rounded-full border border-[var(--outline-variant)] bg-white px-3 py-2 shadow-[0_6px_16px_rgba(0,0,0,0.08)] md:px-4"
@@ -50,6 +57,7 @@ export const TopNavBar = ({ compact = false, searchValue, onSearchChange }: TopN
           </button>
         )}
 
+        {/* Acciones secundarias visibles en desktop */}
         <div className="hidden items-center gap-2 md:flex">
           {!compact && (
             <Link

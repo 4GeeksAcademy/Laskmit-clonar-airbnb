@@ -1,7 +1,12 @@
+// Que hace: lista amenidades del alojamiento con un icono de apoyo.
+// De que depende: arreglo de textos amenity y funcion amenityIcon.
+// Donde se usa: RoomDetailContent.
+
 interface AmenitiesListProps {
   amenities: string[];
 }
 
+// Asigna un icono aproximado segun palabras clave de cada amenidad.
 const amenityIcon = (label: string) => {
   const lower = label.toLowerCase();
 
@@ -17,6 +22,7 @@ const amenityIcon = (label: string) => {
   return "✔️";
 };
 
+// Lista visual de amenidades disponibles en la estancia.
 export const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
   return (
     <section className="space-y-3" aria-label="Amenidades">

@@ -1,9 +1,14 @@
 import { StayReview } from "@/types/stay";
 
+// Que hace: muestra las resenas en tarjetas con metrica y comentario.
+// De que depende: coleccion de StayReview y estilos de grid responsivo.
+// Donde se usa: RoomDetailContent.
+
 interface ReviewsSectionProps {
   reviews: StayReview[];
 }
 
+// Muestra valoraciones en tarjetas. Incluye un input de busqueda preparado para futura logica.
 export const ReviewsSection = ({ reviews }: ReviewsSectionProps) => {
   return (
     <section className="space-y-4" aria-label="Resenas">
